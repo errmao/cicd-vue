@@ -33,9 +33,6 @@ build:
     - npm run build
   only:
     - master
-  artifacts:
-    paths:
-      - dist
 
 deploy:
   services:
@@ -52,10 +49,7 @@ deploy:
     - docker run -d --name $CONTAINER_NAME -v /root/docker/nginx/www:/usr/share/nginx/html -p $PORT:80 $IMAGES_NAME
     - cp -R dist/* /root/docker/nginx/www
     # 删除none镜像
-    # - docker images|grep none|awk '{print $3}'|xargs docker rmi
+    - docker images|grep none|awk '{print $3}'|xargs docker rmi
+  allow_failure: true
   only:
     - master
-  artifacts:
-    paths:
-      - dist
-
