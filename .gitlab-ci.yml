@@ -1,17 +1,19 @@
 stages:
-  - build
-  - deploy
+  - build_deploy
+
+cache:
+  key: ${CI_BUILD_REF_NAME}
+  paths:
+    - node_modules/
+    - dist
 
 build:
-  stage: build
+  stage: build_deploy
+  image: node:node:12.14.0-alpine3.10
   script:
+    # 安装依赖
+    - npm i
     - npm run build
-  tags:
-    - tiny
-
-deploy:
-  stage: deploy
-  script:
     - rm -rf /root/docker/nginx/www
     - cp ./dist /root/docker/nginx/www
   tags:
