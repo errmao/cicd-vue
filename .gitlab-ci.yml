@@ -23,12 +23,15 @@ services:
   - docker:dind
 
 deploy:
+  image: node:latest
   stage: deploy
   only:
     - master
   tags:
     - tiny1
   script:
+    - npm run install
+    - npm run build
     # 构件镜像
     - docker build -t $TAG .
     # 删除容器
