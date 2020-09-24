@@ -1,42 +1,31 @@
 stages:
-  - install
-  - build
-  - deploy
-
-image: node:latest
+  - clean_build_run
 
 cache:
   key: ${CI_BUILD_REF_NAME}
   paths:
     - node_modules/
-    - dist/
 
-vue-install:
-  stage: install
+variables:
+  # 镜像名称
+  TAG: cicdd-v1.0.0
+  # 容器名称
+  CONTAINER_NAME: vue-cicd-demo
+  PORT: 8088
+
+# 清理镜像
+job_clean_build_run:
+  stage: clean_build_run
   only:
     - master
-  script:
-    # 安装依赖
-    - echo "========安装依赖开始======="
-    - npm install --registry=https://registry.npm.taobao.org
-    - echo "========安装依赖结束======="
   tags:
     - tiny
-
-vue-build:
-  stage: build
   script:
-    - echo "========编译开始======="
-    - npm run build
-    - echo "========编译结束======="
-  tags:
-    - tiny
-
-vue-deploy:
-  stage: deploy
-  script:
-    - echo "========部署开始======="
-    - npm run deploy
-    - echo "========部署结束======="
-  tags:
-    - tiny
+    # 构件镜像
+    - docker build -t $TAG .
+    # 删除容器
+    - docker rm -f $CONTAINER_NAME || true
+    # 运行容器
+    - docker run -d --name $CONTAINER_NAME -p $PORT:8080 $TAG
+    # 删除none镜像
+    - docker images|grep none|awk '{print $3}'|xargs docker rmi
