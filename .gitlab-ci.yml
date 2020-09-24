@@ -29,7 +29,7 @@ deploy:
   tags:
     - tiny1
   script:
-    - rm -rf /root/docker/nginx/www
+    - rm -rf /root/docker/nginx/www/*
     - cp -R dist/ /root/docker/nginx/www
   artifacts:
     paths:
