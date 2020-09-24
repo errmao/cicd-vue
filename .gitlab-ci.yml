@@ -31,3 +31,12 @@ vue-build:
     - echo "========编译结束======="
   tags:
     - tiny
+
+vue-deploy:
+  stage: deploy
+  script:
+    - echo "========部署开始======="
+    - npm run deploy
+    - echo "========部署结束======="
+  tags:
+    - tiny
