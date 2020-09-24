@@ -18,13 +18,14 @@ cache:
 
 services:
   - docker:dind
+  - nginx:latest
+  - node:latest
 
 stages:
   - build
   - deploy
 
 build:
-  image: node:latest
   stage: build
   tags:
     - tiny1
@@ -38,7 +39,6 @@ build:
       - dist
 
 deploy:
-  image: nginx:latest
   stage: deploy
   tags:
     - tiny1
