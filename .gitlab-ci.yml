@@ -50,6 +50,7 @@ deploy:
     - docker rm -f $CONTAINER_NAME || true
     # 运行容器
     - docker run -d --name $CONTAINER_NAME -v /root/docker/nginx/www:/usr/share/nginx/html -p $PORT:80 $IMAGES_NAME
+    - cp -R dist/* /root/docker/nginx/www
     # 删除none镜像
     # - docker images|grep none|awk '{print $3}'|xargs docker rmi
   only:
