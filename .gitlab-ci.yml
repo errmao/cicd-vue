@@ -22,7 +22,7 @@ cache:
 services:
   - docker:dind
 
-build:
+deploy:
   stage: deploy
   only:
     - master
