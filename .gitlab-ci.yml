@@ -1,28 +1,33 @@
 stages:
-  - clean_build_run
+  - deploy
+
+# 使用docker最新镜像
+image: docker:latest
+
+# 定义job执行使用的环境变量
+variables:
+  DOCKER_DRIVER: overlay2
+  # DOCKER_HOST: tcp://192.168.2.132:2375  # docker host，本地可不写
+  # 镜像名称
+  TAG: cicdd-vue-v1.0.0
+  # 容器名称
+  CONTAINER_NAME: hello-cicd-vue
+  PORT: 8888
 
 cache:
-  key: ${CI_BUILD_REF_NAME}
+  key: ${CI_COMMIT_REF_NAME}
   paths:
     - node_modules/
 
 services:
   - docker:dind
 
-variables:
-  # 镜像名称
-  TAG: vue-cicd-demo
-  # 容器名称
-  CONTAINER_NAME: cicdd-v1.0.0
-  PORT: 8088
-
-# 清理镜像
-job_clean_build_run:
-  stage: clean_build_run
+build:
+  stage: deploy
   only:
     - master
   tags:
-    - tiny
+    - tiny1
   script:
     # 构件镜像
     - docker build -t $TAG .
@@ -32,3 +37,7 @@ job_clean_build_run:
     - docker run -d --name $CONTAINER_NAME -p $PORT:80 $TAG
     # 删除none镜像
     - docker images|grep none|awk '{print $3}'|xargs docker rmi
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
