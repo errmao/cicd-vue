@@ -38,7 +38,7 @@ build:
       - dist
 
 deploy:
-  imge: nginx:latest
+  image: nginx:latest
   stage: deploy
   tags:
     - tiny1
