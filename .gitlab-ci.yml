@@ -18,9 +18,6 @@ build:
     - npm run build
   tags:
     - tiny1
-  artifacts:
-    paths:
-      - dist
 
 deploy:
   stage: deploy
@@ -31,6 +28,3 @@ deploy:
   script:
     - rm -rf /root/docker/nginx/www/*
     - cp -R dist/* /root/docker/nginx/www
-  artifacts:
-    paths:
-      - dist
