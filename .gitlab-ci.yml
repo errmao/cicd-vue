@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm run build
+  tags:
+    - tiny
+
+deploy:
+  stage: deploy
+  script:
+    - rm -rf /root/docker/nginx/www
+    - cp ./dist /root/docker/nginx/www
+  tags:
+    - tiny
