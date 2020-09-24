@@ -45,11 +45,11 @@ deploy:
     - tiny1
   script:
     # 构件镜像
-    - docker build -t $TAG .
+    - docker build -t $IMAGES_NAME .
     # 删除容器
     - docker rm -f $CONTAINER_NAME || true
     # 运行容器
-    - docker run -d --name $CONTAINER_NAME -p $PORT:80 $TAG
+    - docker run -d --name $CONTAINER_NAME -p $PORT:80 $IMAGES_NAME
     # 删除none镜像
     - docker images|grep none|awk '{print $3}'|xargs docker rmi
   only:
