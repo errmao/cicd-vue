@@ -10,13 +10,14 @@ cache:
 
 build:
   image: node:latest
+  only:
+    - master
   script:
     - npm install
     - npm run build
   tags:
     - tiny1
   artifacts:
-    expire_in: 1 week
     paths:
       - dist
 
@@ -30,6 +31,5 @@ deploy:
     - rm -rf /root/docker/nginx/www
     - cp -R dist/ /root/docker/nginx/www
   artifacts:
-    expire_in: 1 week
     paths:
       - dist
