@@ -30,7 +30,7 @@ deploy:
   tags:
     - tiny1
   script:
-    - npm run install
+    - npm install
     - npm run build
     # 构件镜像
     - docker build -t $TAG .
