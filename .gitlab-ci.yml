@@ -1,6 +1,14 @@
-stages:
-  - build
-  - deploy
+# 使用docker最新镜像
+image: docker:latest
+
+# 定义job执行使用的环境变量
+variables:
+  DOCKER_DRIVER: overlay2
+  # 镜像名称
+  IMAGES_NAME: CICD_VUE
+  # 容器名称
+  CONTAINER_NAME: CICD_VUE_1.0
+  PORT: 8083
 
 cache:
   key: ${CI_COMMIT_REF_NAME}
@@ -8,23 +16,44 @@ cache:
     - node_modules/
     - dist
 
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
 build:
-  stage: build
   image: node:latest
-  only:
-    - master
+  stage: build
+  tags:
+    - tiny1
   script:
     - npm install
     - npm run build
-  tags:
-    - tiny1
-
-deploy:
-  stage: deploy
   only:
     - master
+  artifacts:
+    paths:
+      - dist
+
+deploy:
+  imge: nginx:latest
+  stage: deploy
   tags:
     - tiny1
   script:
-    - rm -rf /root/docker/nginx/www/*
-    - cp -R dist/* /root/docker/nginx/www
+    # 构件镜像
+    - docker build -t $TAG .
+    # 删除容器
+    - docker rm -f $CONTAINER_NAME || true
+    # 运行容器
+    - docker run -d --name $CONTAINER_NAME -p $PORT:80 $TAG
+    # 删除none镜像
+    - docker images|grep none|awk '{print $3}'|xargs docker rmi
+  only:
+    - master
+  artifacts:
+    paths:
+      - dist
+

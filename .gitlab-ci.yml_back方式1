@@ -1,0 +1,30 @@
+stages:
+  - build
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_NAME}
+  paths:
+    - node_modules/
+    - dist
+
+build:
+  stage: build
+  image: node:latest
+  only:
+    - master
+  script:
+    - npm install
+    - npm run build
+  tags:
+    - tiny1
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  tags:
+    - tiny1
+  script:
+    - rm -rf /root/docker/nginx/www/*
+    - cp -R dist/* /root/docker/nginx/www
