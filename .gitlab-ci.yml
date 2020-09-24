@@ -51,7 +51,7 @@ deploy:
     # 运行容器
     - docker run -d --name $CONTAINER_NAME -p $PORT:80 $IMAGES_NAME
     # 删除none镜像
-    - docker images|grep none|awk '{print $3}'|xargs docker rmi
+    # - docker images|grep none|awk '{print $3}'|xargs docker rmi
   only:
     - master
   artifacts:
