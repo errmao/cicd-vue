@@ -1,21 +1,33 @@
 stages:
+  - build
   - deploy
 
 cache:
   key: ${CI_COMMIT_REF_NAME}
   paths:
     - node_modules/
+    - dist
+
+build:
+  image: node:latest
+  script:
+    - npm install
+    - npm run build
+  tags:
+    - tiny1
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
 
 deploy:
-  image: node:latest
   stage: deploy
   only:
     - master
   tags:
     - tiny1
   script:
-    - npm install
-    - npm run build
+    - rm -rf /root/docker/nginx/www
     - cp -R dist/ /root/docker/nginx/www
   artifacts:
     expire_in: 1 week
