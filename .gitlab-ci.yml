@@ -15,6 +15,6 @@ build:
     - npm i
     - npm run build
     - rm -rf /root/docker/nginx/www
-    - cp dist /root/docker/nginx/www
+    - cp -r ./dist /root/docker/nginx/www
   tags:
     - tiny
