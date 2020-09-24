@@ -1,26 +1,10 @@
 stages:
   - deploy
 
-# 使用docker最新镜像
-image: docker:latest
-
-# 定义job执行使用的环境变量
-variables:
-  DOCKER_DRIVER: overlay2
-  # DOCKER_HOST: tcp://192.168.2.132:2375  # docker host，本地可不写
-  # 镜像名称
-  TAG: cicdd-vue-v1.0.0
-  # 容器名称
-  CONTAINER_NAME: hello-cicd-vue
-  PORT: 8888
-
 cache:
   key: ${CI_COMMIT_REF_NAME}
   paths:
     - node_modules/
-
-services:
-  - docker:dind
 
 deploy:
   image: node:latest
@@ -32,14 +16,7 @@ deploy:
   script:
     - npm install
     - npm run build
-    # 构件镜像
-    - docker build -t $TAG .
-    # 删除容器
-    - docker rm -f $CONTAINER_NAME || true
-    # 运行容器
-    - docker run -d --name $CONTAINER_NAME -p $PORT:80 $TAG
-    # 删除none镜像
-    - docker images|grep none|awk '{print $3}'|xargs docker rmi
+    - cp -R dist/ /root/docker/nginx/www
   artifacts:
     expire_in: 1 week
     paths:
