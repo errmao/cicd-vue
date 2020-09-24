@@ -9,6 +9,7 @@ cache:
     - dist
 
 build:
+  stage: build
   image: node:latest
   only:
     - master
