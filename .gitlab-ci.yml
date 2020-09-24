@@ -6,7 +6,7 @@ cache:
   paths:
     - node_modules/
     - dist
-
+# 部署
 build:
   stage: build_deploy
   image: node:14.11.0-stretch
