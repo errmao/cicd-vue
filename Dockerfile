@@ -1,9 +1,6 @@
 # 基于node镜像
 FROM node
 
-# 设置工作路径 类似cd /home/vue-cicd
-WORKDIR /home/vue-cicd
-
 # 打包到/home/vue-cicd/dist目录下
 RUN npm install \
     && npm run build
